@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/zerodays/sistem-payments/internal/graphql"
 	"github.com/zerodays/sistem-payments/internal/handle"
 	"net/http"
 )
@@ -62,6 +63,12 @@ func apiRoutes() []Route {
 			Name: "fault_tolerance_switch",
 			Path: "/fault",
 			GET:  http.HandlerFunc(handle.FaultToleranceHandle),
+		},
+
+		{
+			Name: "graphql",
+			Path: "/graphql",
+			POST: http.HandlerFunc(graphql.Handle),
 		},
 	}
 }

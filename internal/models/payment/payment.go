@@ -27,7 +27,7 @@ func (p *Payment) Insert() error {
 // Update updates payment.
 func (p *Payment) Update() error {
 	update := `UPDATE payments SET amount=$2, payed=$3, date_due=$4, date_payed=$5 WHERE id=$1 RETURNING *`
-	return database.DB.Get(p, update, p.ID, p.Amount, p.Payed, p.DatePayed, p.DatePayed)
+	return database.DB.Get(p, update, p.ID, p.Amount, p.Payed, p.DateDue, p.DatePayed)
 }
 
 // Delete deletes payment.

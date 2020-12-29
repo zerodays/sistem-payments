@@ -5,6 +5,7 @@ go 1.15
 require (
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/gorilla/mux v1.7.4
+	github.com/graphql-go/graphql v0.7.9
 	github.com/jackc/pgx/v4 v4.10.1
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/justinas/alice v1.2.0
