@@ -12,5 +12,6 @@ require (
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/zerodays/gonfig v0.0.0-20201107204854-ef963eeaec23
 	github.com/zerodays/sistem-auth v0.0.0-20201029094638-2b49c6ced576
+	gopkg.in/guregu/null.v4 v4.0.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )

@@ -74,9 +74,10 @@ func addMiddleware(handler http.Handler, authorizedOnly, customContentType bool)
 
 	c = c.Append(corsMiddleware)
 
-	if authorizedOnly {
-		c = c.Append(middleware.RequiredMiddleware)
-	}
+	// TODO: Uncomment to enable user auth
+	//if authorizedOnly {
+	//	c = c.Append(middleware.RequiredMiddleware)
+	//}
 
 	return c.Then(handler)
 }
