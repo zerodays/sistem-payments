@@ -2,6 +2,7 @@ package payment
 
 import (
 	"github.com/zerodays/sistem-payments/internal/database"
+	"github.com/zerodays/sistem-payments/internal/models/project"
 	"gopkg.in/guregu/null.v4"
 	"time"
 )
@@ -69,6 +70,36 @@ func Overdue() ([]*Payment, error) {
 
 	err := database.DB.Select(&payments, query, time.Now())
 	return payments, err
+}
+
+// ForPhase return payments for specified phase.
+func ForPhase(phase *project.Phase) ([]*Payment, error) {
+	payments := make([]*Payment, 0)
+	query := `SELECT * FROM payments WHERE phase_id=$1 ORDER BY date_due DESC`
+
+	err := database.DB.Select(&payments, query, phase.ID)
+	return payments, err
+}
+
+// ForProject returns all payments for specified project.
+func ForProjectID(id int) ([]*Payment, error) {
+	phases, err := project.PhasesForProject(id)
+	if err != nil {
+		return nil, err
+	}
+
+	payments := make([]*Payment, 0)
+
+	for _, phase := range phases {
+		ps, err := ForPhase(phase)
+		if err != nil {
+			return nil, err
+		}
+
+		payments = append(payments, ps...)
+	}
+
+	return payments, nil
 }
 
 // Total returns sum of all payments in database.

@@ -33,4 +33,9 @@ var (
 		StatusCode: http.StatusBadRequest,
 		Code:       "invalid_id",
 	}
+
+	UnknownError = ResponseError{
+		StatusCode: http.StatusInternalServerError,
+		Code:       "unknown_error",
+	}
 )

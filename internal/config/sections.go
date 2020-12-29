@@ -97,6 +97,11 @@ func (m microservices) UsersUrl() string {
 	return val
 }
 
+func (m microservices) ProjectsUrl() string {
+	val, _ := cfg.GetString("microservices", "projects_url")
+	return val
+}
+
 /////////////////////
 // SECTIONS EXPORT //
 /////////////////////

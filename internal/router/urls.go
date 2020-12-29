@@ -44,5 +44,18 @@ func apiRoutes() []Route {
 			PUT:            http.HandlerFunc(handle.UpdateUserPaymentHandle),
 			DELETE:         http.HandlerFunc(handle.DeleteUserPaymentHandle),
 		},
+
+		{
+			Name:           "payments_per_projects",
+			Path:           "/payments/projects",
+			AuthorizedOnly: true,
+			GET:            http.HandlerFunc(handle.PaymentsForProjectsHandle),
+		},
+		{
+			Name:           "payments_per_project",
+			Path:           "/payments/projects/{id}",
+			AuthorizedOnly: true,
+			GET:            http.HandlerFunc(handle.PaymentsForProjectHandle),
+		},
 	}
 }
