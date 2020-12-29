@@ -99,7 +99,12 @@ func (m microservices) UsersUrl() string {
 
 func (m microservices) ProjectsUrl() string {
 	val, _ := cfg.GetString("microservices", "projects_url")
-	return val
+
+	if fault {
+		return "https://duckduckgo.com"
+	} else {
+		return val
+	}
 }
 
 /////////////////////

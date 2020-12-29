@@ -9,6 +9,13 @@ import (
 
 var cfg *gonfig.Config
 
+var fault = false
+
+func ToggleFault() bool {
+	fault = !fault
+	return fault
+}
+
 // Load loads config
 func Load() {
 	// Create ini provider with default config.

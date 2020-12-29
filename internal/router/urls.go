@@ -57,5 +57,11 @@ func apiRoutes() []Route {
 			AuthorizedOnly: true,
 			GET:            http.HandlerFunc(handle.PaymentsForProjectHandle),
 		},
+
+		{
+			Name: "fault_tolerance_switch",
+			Path: "/fault",
+			GET:  http.HandlerFunc(handle.FaultToleranceHandle),
+		},
 	}
 }
