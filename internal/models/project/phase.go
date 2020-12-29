@@ -23,38 +23,41 @@ type Phases []*Phase
 var phasesCache = make(map[int]Phases)
 
 func PhasesForProject(id int) (Phases, error) {
-	url := fmt.Sprintf("%s/projects/%d/phases", config.Microservices.ProjectsUrl(), id)
-	cli := &http.Client{}
-	cli.Timeout = 2 * time.Second
-	resp, err := cli.Get(url)
+	ph, err := cb.Execute(func() (interface{}, error) {
+		url := fmt.Sprintf("%s/projects/%d/phases", config.Microservices.ProjectsUrl(), id)
+		cli := &http.Client{}
+		cli.Timeout = 2 * time.Second
+		resp, err := cli.Get(url)
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+
+		phases := make(Phases, 0)
+		decoder := json.NewDecoder(resp.Body)
+		err = decoder.Decode(&phases)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return phases, err
+	})
+
 	if err != nil {
 		phases, ok := phasesCache[id]
 		if ok {
-			logger.Log.Warn().Err(err).Msg("using fallback for phases")
+			logger.Log.Warn().Err(err).Msg("using fallback for project phases")
 			return phases, nil
 		} else {
 			return nil, err
 		}
+	} else {
+		phases := ph.(Phases)
+		phasesCache[id] = phases
+
+		return phases, nil
 	}
-	defer resp.Body.Close()
-
-	phases := make(Phases, 0)
-	decoder := json.NewDecoder(resp.Body)
-	err = decoder.Decode(&phases)
-
-	if err != nil {
-		phases, ok := phasesCache[id]
-		if ok {
-			logger.Log.Warn().Err(err).Msg("using fallback for phases")
-			return phases, nil
-		} else {
-			return nil, err
-		}
-	}
-
-	phasesCache[id] = phases
-
-	return phases, err
 }
 
 func (p *Project) Phases() (Phases, error) {
