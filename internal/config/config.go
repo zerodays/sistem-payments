@@ -33,5 +33,5 @@ func Load() {
 
 	// Create gonfig instance.
 	cfg = gonfig.New(iniProvider, environment.Provider{})
-	cfg.AppName = "sistem_projects"
+	cfg.AppName = "sistem_payments"
 }
