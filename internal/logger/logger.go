@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"crypto/tls"
 	"github.com/rs/zerolog"
 	"github.com/zerodays/sistem-payments/internal/config"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -24,12 +25,22 @@ func Init() {
 	if config.Logs.FileLogging() {
 		writers = append(writers, newRollingFile())
 	}
+	if config.Logs.LogitLogging() {
+		conn, err := tls.Dial("tcp", config.Logs.LoggitURL(), &tls.Config{RootCAs: nil})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		writers = append(writers, conn)
+	}
 
 	multiWriter := io.MultiWriter(writers...)
 
 	// Configure shared logger instance.
 	Log = zerolog.New(multiWriter).Level(zerolog.Level(config.Logs.LogLevel())).
 		With().
+		Str("app_name", "sistem_payments").
+		Str("version", "0.0.1").
 		Timestamp().
 		Caller().
 		Logger()

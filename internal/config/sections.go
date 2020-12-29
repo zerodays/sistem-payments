@@ -69,6 +69,16 @@ func (l logs) ConsoleLogging() bool {
 	return val
 }
 
+func (l logs) LogitLogging() bool {
+	val, _ := cfg.GetBool("logs", "logit_logging")
+	return val
+}
+
+func (l logs) LoggitURL() string {
+	val, _ := cfg.GetString("logs", "logit_url")
+	return val
+}
+
 func (l logs) LogPath() string {
 	val, _ := cfg.GetString("logs", "log_path")
 	return val

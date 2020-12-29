@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/google/uuid"
 	"github.com/justinas/alice"
 	"github.com/rs/zerolog/hlog"
 	"github.com/zerodays/sistem-auth/middleware"
@@ -19,6 +20,13 @@ func createLoggerMiddleware() func(handler http.Handler) http.Handler {
 			userID = u.UID
 		}
 
+		// Set request ID header if needed
+		requestId := r.Header.Get("X-Request-ID")
+		if requestId == "" {
+			requestId = uuid.New().String()
+			r.Header.Set("X-Request-ID", requestId)
+		}
+
 		hlog.FromRequest(r).Info().
 			Str("method", r.Method).
 			Stringer("url", r.URL).
@@ -27,6 +35,7 @@ func createLoggerMiddleware() func(handler http.Handler) http.Handler {
 			Dur("duration", duration).
 			Bool("authenticated", u != nil).
 			Str("user_id", userID).
+			Str("request_id", requestId).
 			Send()
 	})
 }
