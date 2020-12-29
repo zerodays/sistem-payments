@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sistem-payments-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sistem-payments
+  template:
+    metadata:
+      labels:
+        app: sistem-payments
+    spec:
+      containers:
+        - image: zdays/sistem-payments:latest
+          name: sistem-payments
+          env:
+            - name: SISTEM_PAYMENTS_DATABASE_HOST
+              value: db.recompile.it
+            - name: SISTEM_PAYMENTS_DATABASE_DB_NAME
+              value: sistem_payments
+            - name: SISTEM_PAYMENTS_DATABASE_SSL_MODE
+              value: require
+            - name: SISTEM_PAYMENTS_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sistem-db
+                  key: username
+            - name: SISTEM_PAYMENTS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sistem-db
+                  key: password
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sistem-payments
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: sistem-payments
