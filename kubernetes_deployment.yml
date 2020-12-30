@@ -16,6 +16,10 @@ spec:
         - image: zdays/sistem-payments:latest
           name: sistem-payments
           env:
+            - name: SISTEM_PAYMENTS_MICROSERVICES_USERS_URL
+              value: http://10.0.217.64:8080/api/v1
+            - name: SISTEM_PAYMENTS_MICROSERVICES_PROJECTS_URL
+              value: http://10.0.174.12:8080/api/v1
             - name: SISTEM_PAYMENTS_DATABASE_HOST
               value: db.recompile.it
             - name: SISTEM_PAYMENTS_DATABASE_DB_NAME
@@ -46,7 +50,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 80
+    - port: 8080
       protocol: TCP
       targetPort: server
   selector:
